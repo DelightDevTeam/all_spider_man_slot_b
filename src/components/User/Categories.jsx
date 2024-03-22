@@ -4,16 +4,15 @@ import BASE_URL from "../../hooks/baseURL";
 import fire from "../../assets/img/categories/fire.png";
 import all from "../../assets/img/categories/all.png";
 
-const Categories = ({ activeCategory, setActiveCategory, link }) => {
-  let [url, setUrl] = useState(link);
-  let btnUrl = BASE_URL + "/gameTypes";
+const Categories = ({ activeCategory, setActiveCategory }) => {
+  let btnUrl = BASE_URL + "/gameType";
   let { data: games } = useFetch(btnUrl);
+
   // console.log(games);
 
-  let handleCategory = (description, id) => {
-    setActiveCategory(description);
-    setUrl(`${BASE_URL}/gameTypeProviders/${id}`);
-    console.log(description, url);
+  let handleCategory = (name, id) => {
+    // console.log(url);
+    setActiveCategory(name);
   };
 
   return (
@@ -28,7 +27,7 @@ const Categories = ({ activeCategory, setActiveCategory, link }) => {
           />
           <p className="font-weight-bold mt-2">ALL GAMES</p>
         </div>
-        <div onClick={(e) => handleCategory("hotgame", 5)} className="category">
+        {/* <div onClick={(e) => handleCategory("hotgame", 5)} className="category">
           <img
             className="categoryImg"
             src={fire}
@@ -36,20 +35,20 @@ const Categories = ({ activeCategory, setActiveCategory, link }) => {
             style={{ width: "30px", height: "40px" }}
           />
           <p className="font-weight-bold mt-2">HOT GAMES</p>
-        </div>
+        </div> */}
         {games &&
           games.map((game, index) => (
             <div
               key={index} // Use game.id instead of index for a unique key
-              onClick={(e) => handleCategory(game.description, game.id)}
+              onClick={(e) => handleCategory(game.name, game.id)}
               className="category"
             >
               <img
                 className="categoryImg"
                 src={game.img_url}
-                alt={game.description} // Add alt attribute for accessibility
+                alt={game.name} // Add alt attribute for accessibility
               />
-              <p className="font-weight-bold mt-2">{game.description}</p>
+              <p className="font-weight-bold mt-2">{game.name}</p>
             </div>
           ))}
       </div>

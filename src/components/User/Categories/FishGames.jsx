@@ -1,20 +1,36 @@
-import React from 'react'
-import f1 from '../../../assets/img/categories/f1.png'
-import f2 from '../../../assets/img/categories/f2.png'
-import f3 from '../../../assets/img/categories/f3.png'
-import f4 from '../../../assets/img/categories/f4.png'
-import f5 from '../../../assets/img/categories/f5.png'
-import f6 from '../../../assets/img/categories/f6.png'
-import f7 from '../../../assets/img/categories/f7.png'
-import f8 from '../../../assets/img/categories/f8.png'
+import React, { useState } from 'react'
+import BtnSpinner from "../../Auth/BtnSpinner";
+import useFetch from '../../../hooks/useFetch';
+import BASE_URL from '../../../hooks/baseURL';
+import { Link } from 'react-router-dom';
+
 const FishGames = () => {
-  const fishes=[f1,f2,f3,f4,f5,f6,f7,f8]
+  const [url, setUrl] = useState(BASE_URL + '/allGameProducts');
+  const { data: games, loading } = useFetch(url);
+  const fishes = games[3]?.products;
+  // console.log(games);
+
   return (
-    <div className='px-2 px-sm-4'>
-      <div className='categoryGames'>
-        {fishes.map((fish, index)=>{
-          return <img key={index} className='categoryGame' src={fish} />
-        })}
+    <div className="container mt-3">
+      {loading && <BtnSpinner />}
+      <div className="mb-4">
+        <h3>Fishing</h3>
+        <div className="row">
+          {fishes && fishes.map((game, index) => (
+            <div className="col-md-2 col-4 mb-3 mx-0 px-1" key={index}>
+              <Link
+                key={game.id}
+                className=''
+                onClick={() => launchGame(game?.code, game.code)}
+              >
+                <img
+                  className={`img-fluid rounded-3 shadow gameImg w-100 h-auto`}
+                  src={game.imgUrl}
+                />
+              </Link>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )

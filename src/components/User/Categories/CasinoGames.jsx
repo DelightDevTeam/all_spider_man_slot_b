@@ -2,10 +2,14 @@ import React, { useState } from "react";
 import BtnSpinner from "../../Auth/BtnSpinner";
 import { Link, Outlet } from "react-router-dom";
 import BASE_URL from "../../../hooks/baseURL";
+import useFetch from "../../../hooks/useFetch";
 
-const CasinoGames = ({ providers, loading }) => {
+const CasinoGames = () => {
+  const [url, setUrl] = useState(BASE_URL + '/allGameProducts');
+  const { data: games, loading } = useFetch(url);
+  const casinos = games[1]?.products;
+  console.log(games);
 
-  let [loader, setLoader] = useState(false);
   let auth = localStorage.getItem('authToken');
 
   const launchGame = (gameId) => {
@@ -37,59 +41,27 @@ const CasinoGames = ({ providers, loading }) => {
   }
 
   return (
-    <div className="px-2 px-sm-4 pb-5 mb-5 pt-4">
+    <div className="container mt-3">
       {loading && <BtnSpinner />}
-      <div className="row">
-        {providers &&
-          providers.map((provider, index) => {
-            return (
-              <div className="col-md-3 col-6 mb-4" key={index}>
-                {provider.p_code !== "PR" && (
-                  <>
-                  {auth && (
-                      <Link className="text-decoration-none" onClick={() => launchGame(provider.id)} style={{ "cursor" : "pointer" }}>
-                        <img src={provider.img_url} className='categoryGame' alt="" />
-                        <p className='text-white mt-2 text-center'>
-                          {provider.description}
-                        </p>
-                      </Link>
-                  )}
-                  {!auth && (
-                      <Link className="text-decoration-none" to={'/login'} style={{ "cursor" : "pointer" }}>
-                          <img src={provider.img_url} className='categoryGame' alt="" />
-                          <p className='text-white mt-2 text-center'>
-                          {provider.description}
-                          </p>
-                      </Link>
-                  )}
-
-                  </>
-                )}
-                {provider.p_code === "PR" && (
-                  <>
-                    <Link className="text-decoration-none text-white text-center" to={'/games'} onClick={(e)=>{
-                      localStorage.removeItem("provider_id");
-                      localStorage.removeItem("gameType_id");
-                      localStorage.removeItem("title");
-                      localStorage.setItem("provider_id", provider.id);
-                      localStorage.setItem("gameType_id", provider.pivot.game_type_id);
-                      localStorage.setItem("title", provider.description);
-                    }}>
-                    <img
-                      key={index}
-                      className="categoryGame"
-                      src={provider.img_url}
-                    />
-                    <p className="mt-2 text-center">{provider.description}</p>
-                    </Link>
-                  </>
-                )}
-
-              </div>
-            );
-          })}
+      <div className="mb-4">
+        <h3>Live Casino</h3>
+        <div className="row">
+          {casinos && casinos.map((game, index) => (
+            <div className="col-md-2 col-4 mb-3 mx-0 px-1" key={index}>
+              <Link
+                key={game.id}
+                className=''
+                onClick={() => launchGame(game?.code, game.code)}
+              >
+                <img
+                  className={`img-fluid rounded-3 shadow gameImg w-100 h-auto`}
+                  src={game.imgUrl}
+                />
+              </Link>
+            </div>
+          ))}
+        </div>
       </div>
-      <Outlet />
     </div>
   );
 };

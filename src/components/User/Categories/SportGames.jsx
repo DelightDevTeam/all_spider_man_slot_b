@@ -2,9 +2,14 @@ import React, { useState } from "react";
 import BtnSpinner from "../../Auth/BtnSpinner";
 import { Link } from "react-router-dom";
 import BASE_URL from "../../../hooks/baseURL";
+import useFetch from "../../../hooks/useFetch";
 
 
-const SportGames = ({ providers, loading }) => {
+const SportGames = () => {
+  const [url, setUrl] = useState(BASE_URL + '/allGameProducts');
+  const { data: games, loading } = useFetch(url);
+  const sports = games[2]?.products;
+  // console.log(games);
 
     let [loader, setLoader] = useState(false);
     let auth = localStorage.getItem('authToken');
@@ -38,32 +43,26 @@ const SportGames = ({ providers, loading }) => {
   }
 
   return (
-    <div className="px-2 px-sm-4 pb-5 mb-5 pt-4">
+    <div className="container mt-3">
       {loading && <BtnSpinner />}
-      <div className="row">
-        {providers &&
-          providers.map((provider, index) => {
-            return (
-              <div className="col-md-3 col-6 mb-4" key={index}>
-                  {!auth && (
-                      <Link className="text-decoration-none" to={'/login'} style={{ "cursor" : "pointer" }}>
-                          <img src={provider.img_url} className='categoryGame' alt="" />
-                          <p className='text-white mt-2 text-center'>
-                          {provider.description}
-                          </p>
-                      </Link>
-                  )}
-                  {auth && (
-                    <Link className="text-decoration-none" onClick={() => launchGame(provider.id)} style={{ "cursor" : "pointer" }}>
-                      <img src={provider.img_url} className='img-fluid rounded-4 shadow' alt="" />
-                      <p className='text-white mt-2 text-center'>
-                        {provider.description}
-                      </p>
-                    </Link>
-                  )}
-              </div>
-            );
-          })}
+      <div className="mb-4">
+        <h3>Sport Book</h3>
+        <div className="row">
+          {sports && sports.map((game, index) => (
+            <div className="col-md-2 col-4 mb-3 mx-0 px-1" key={index}>
+              <Link
+                key={game.id}
+                className=''
+                onClick={() => launchGame(game?.code, game.code)}
+              >
+                <img
+                  className={`img-fluid rounded-3 shadow gameImg w-100 h-auto`}
+                  src={game.imgUrl}
+                />
+              </Link>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

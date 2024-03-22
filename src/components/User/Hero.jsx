@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
+import useFetch from "../../hooks/useFetch";
+import BASE_URL from "../../hooks/baseURL";
 
 const Hero = () => {
+  const { data: bannerText } = useFetch(BASE_URL + '/bannerText');
+
   return (
     <div className="hero">
       <marquee>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Non quaerat,
-        accusantium sequi, repellendus iusto maxime tenetur soluta voluptatibus,
-        animi adipisci veniam! Non pariatur ipsa nobis laboriosam, ducimus porro
-        eveniet doloribus.
+        {bannerText && bannerText.text}
       </marquee>
       <Navbar />
     </div>
