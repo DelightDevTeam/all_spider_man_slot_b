@@ -8,6 +8,7 @@ import Promotion from "../Pages/User/Promotion";
 import ChangePassword from "../Pages/User/ChangePassword";
 import Profile from "../Pages/User/Profile";
 import GameHistory from "../Pages/User/GameHistory";
+import History from "../Pages/User/History";
 
 const router = createBrowserRouter([
   {
@@ -23,8 +24,12 @@ const router = createBrowserRouter([
         element: <Game />,
       },
       {
-        path: "/gamesHistory",
+        path: "/game_logs",
         element: <GameHistory />,
+      },
+      {
+        path: "/history",
+        element: <History />,
       },
       {
         path: "/wallet",

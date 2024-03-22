@@ -6,8 +6,7 @@
   gap: 30px;
 }
 .logo {
-  height: 100px;
-  width: auto;
+  width: 80px;
   border-radius: 15px;
 }
 .loginBtn {

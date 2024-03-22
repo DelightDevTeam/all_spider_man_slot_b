@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BASE_URL from "../../../hooks/baseURL";
 import useFetch from "../../../hooks/useFetch";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import BtnSpinner from "../../Auth/BtnSpinner";
-const ArcadeGames = () => {
 
+const ArcadeGames = () => {
+  const navigate = useNavigate();
   const [url, setUrl] = useState(BASE_URL + '/allGameProducts');
   const { data: games, loading } = useFetch(url);
 
@@ -12,38 +13,42 @@ const ArcadeGames = () => {
   const casinos = games[1]?.products;
   const sports = games[2]?.products;
   const fishes = games[3]?.products;
-  // console.log(slots);
-  // return;
 
-  let auth = localStorage.getItem("authToken");
+  let auth = localStorage.getItem("token");
 
-  const launchGame = (gameId) => {
-    console.log(gameId);
-    // setLoader(true);
-    //fetch api calling
-    fetch(BASE_URL + "/launchGame/" + gameId, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("authToken"),
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Launch Game failed");
-        }
-        console.log("Launch Game success");
-        return response.json();
+  const launchGame = (productId, gameType) => {
+    if(!auth){
+      navigate('/login');
+    }else{
+      let gameData = {
+        productId: productId,
+        gameType: gameType,
+      }
+  
+      fetch(BASE_URL + "/game/Seamless/LaunchGame", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+        body: JSON.stringify(gameData)
       })
-      .then((data) => {
-        // console.log(data.data);
-        // setLoader(false);
-        window.location.href = data.data;
-      })
-      .catch((error) => {
-        console.error("Launch Game error:", error);
-      });
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Launch Game failed");
+          }
+          console.log("Launch Game success");
+          return response.json();
+        })
+        .then((data) => {
+          window.open(data.Url, '_blank');
+        })
+        .catch((error) => {
+          console.error("Launch Game error:", error);
+        });
+    }
+
   };
 
   return (
@@ -57,7 +62,10 @@ const ArcadeGames = () => {
               <Link
                 key={game.id}
                 className='w-100'
-                onClick={() => launchGame(game?.code, game.code)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  launchGame(game.code, game.pivot.game_type_id)}
+                }
               >
                 <img
                   className={`img-fluid rounded-3 shadow gameImg w-100 h-auto`}
@@ -76,7 +84,10 @@ const ArcadeGames = () => {
               <Link
                 key={game.id}
                 className='col-4 col-md-4 col-lg-3 col-xl-2 mb-1 mb-sm-4 px-1 py-0 mx-0'
-                onClick={() => launchGame(game?.code, game.code)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  launchGame(game.code, game.pivot.game_type_id)}
+                }
               >
                 <img
                   className={`img-fluid rounded-3 shadow gameImg w-100 h-auto`}
@@ -95,7 +106,10 @@ const ArcadeGames = () => {
               <Link
                 key={game.id}
                 className='col-4 col-md-4 col-lg-3 col-xl-2 mb-1 mb-sm-4 px-1 py-0 mx-0'
-                onClick={() => launchGame(game?.code, game.code)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  launchGame(game.code, game.pivot.game_type_id)}
+                }
               >
                 <img
                   className={`img-fluid rounded-3 shadow gameImg w-100 h-auto`}
@@ -114,7 +128,10 @@ const ArcadeGames = () => {
               <Link
                 key={game.id}
                 className='col-4 col-md-4 col-lg-3 col-xl-2 mb-1 mb-sm-4 px-1 py-0 mx-0'
-                onClick={() => launchGame(game?.code, game.code)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  launchGame(game.code, game.pivot.game_type_id)}
+                }
               >
                 <img
                   className={`img-fluid rounded-3 shadow gameImg w-100 h-auto`}

@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 
 const HomeFooter = () => {
   const footer = [
-    { icon: <i className="fa-solid fa-wallet"></i>, title: "Wallet" },
+    { icon: <i className="fa-solid fa-home"></i>, title: "Home" },
     { icon: <i className="fa-solid fa-lock"></i>, title: "Password" },
     { icon: <i className="fa-solid fa-bullhorn"></i>, title: "Promotion" },
-    { icon: <i className="fa-solid fa-gamepad"></i>, title: "Game History" },
-    { icon: <i className="fa-solid fa-bars"></i>, title: "Menu" },
+    { icon: <i className="fa-solid fa-gamepad"></i>, title: "Game Logs" },
+    { icon: <i className="fa-solid fa-history"></i>, title: "History" },
   ];
   return (
     <div className="homeFooter d-flex d-lg-none justify-content-between align-items-center">
@@ -15,15 +15,15 @@ const HomeFooter = () => {
         return (
           <Link
             to={
-              item.title === "Wallet"
-                ? "/wallet"
-                : item.title === "Menu"
+              item.title === "Home"
                 ? "/"
+                : item.title === "Password"
+                ? "/password"
                 : item.title == "Promotion"
                 ? "/promotion"
-                : item.title == "Game History"
-                ? "/gamesHistory"
-                : "/change-password"
+                : item.title == "Game Logs"
+                ? "/game_logs"
+                : "/history"
             }
             key={item.title}
             className="footerItem text-decoration-none pt-2"

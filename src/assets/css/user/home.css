@@ -42,8 +42,8 @@ marquee {
   padding-bottom: 120px;
 }
 .bannerImg {
-  height: 250px;
-  vertical-align: middle;
+  height: auto;
+  /* vertical-align: middle; */
   width: 100%;
 }
 .hero {

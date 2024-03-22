@@ -5,25 +5,25 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 
-export default function GameHistory() {
-  let auth = localStorage.getItem("token");
-  let navigate = useNavigate();
+export default function History() {
+    let auth = localStorage.getItem("token");
+    let navigate = useNavigate();
     useEffect(() => {
-      if (!auth) {
-        navigate("/login");
-      }
-    }, [navigate]);
-  
-  const [url, setUrl] = useState("/wager-logs?type=");
-  const [param, setParam] = useState("today");
-  const {data: logs, loading, error} = useFetch(BASE_URL+url+param);
+        if (!auth) {
+          navigate("/login");
+        }
+      }, [navigate]);
+
+    const [url, setUrl] = useState("/transactions?type=");
+    const [param, setParam] = useState("today");
+    const {data: logs, loading, error} = useFetch(BASE_URL+url+param);
 
 
   return (
     <>
       <ToastContainer />
       <div className="container my-5">
-        <h3 className="text-center mb-4">Game Logs</h3>
+        <h3 className="text-center mb-4">History Logs</h3>
         <div className="d-flex mb-3">
                 <button 
                 className={`btn btn-sm btn-outline-primary m-md-2 m-1 ${param == "today" ? "active" : ""}`}
@@ -46,16 +46,18 @@ export default function GameHistory() {
             {logs && (
             <div className="table-responsive text-center">
                 <table className="table table-primary">
-                    <thead className="">
+                    <thead>
                         <tr>
                             <th>နံပါတ်</th>
-                            <th>ဂိမ်းအခြေအနေ</th>
+                            {/* <th>ဂိမ်းအခြေအနေ</th> */}
+                            <th>အပိတ်လက်ကျန်</th>
+                            <th>အမျိုးအစား</th>
                             <th>ပမာဏ (ကျပ်)</th>
                             <th>အချိန်</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {
+                    {
                             loading && (
                                 <div className="text-center text-white mt-3">
                                     loading....
@@ -66,7 +68,9 @@ export default function GameHistory() {
                         {logs && logs.map((log, index)=>(
                             <tr key={index}>
                                 <td>{++index}</td>
-                                <td className={`${log.status == "win" ? "text-success" : "text-danger"}`}>{log.status.toUpperCase()}</td>
+                                {/* <td className={`${log.status == "win" ? "text-success" : "text-danger"}`}>{log.status.toUpperCase()}</td> */}
+                                <td>{log.closing_balance.toLocaleString()}</td>
+                                <td className={`${log.type == "deposit" ? "text-success" : "text-danger"}`}>{log.type}</td>
                                 <td>{parseFloat(log.amount).toLocaleString()}</td>
                                 <td>{log.datetime}</td>
                             </tr>

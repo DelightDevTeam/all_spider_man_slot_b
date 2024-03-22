@@ -10,7 +10,7 @@ const Promotion = () => {
   const [detail, setDetail] = useState(false);
   const [url, setUrl] = useState(BASE_URL+ "/promotion");
   let { data: promotions, loading, error } = useFetch(url);
-  // console.log(promotions);
+  console.log(promotions);
 
   return (
     <>

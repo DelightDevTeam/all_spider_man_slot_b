@@ -8,37 +8,43 @@ const CasinoGames = () => {
   const [url, setUrl] = useState(BASE_URL + '/allGameProducts');
   const { data: games, loading } = useFetch(url);
   const casinos = games[1]?.products;
-  console.log(games);
 
-  let auth = localStorage.getItem('authToken');
+  let auth = localStorage.getItem("token");
 
-  const launchGame = (gameId) => {
-    setLoader(true);
-    //fetch api calling
-    fetch(BASE_URL + "/launchGame/" + gameId, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("authToken"),
-      },
-    })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Launch Game failed");
+  const launchGame = (productId, gameType) => {
+    if(!auth){
+      navigate('/login');
+    }else{
+      let gameData = {
+        productId: productId,
+        gameType: gameType,
       }
-      console.log("Launch Game success");
-      return response.json();
-    })
-    .then((data) => {
-      // console.log(data.data);
-      setLoader(false);
-      window.location.href = data.data;
-    })
-    .catch((error) => {
-      console.error("Launch Game error:", error);
-    });
-  }
+  
+      fetch(BASE_URL + "/game/Seamless/LaunchGame", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+        body: JSON.stringify(gameData)
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Launch Game failed");
+          }
+          console.log("Launch Game success");
+          return response.json();
+        })
+        .then((data) => {
+          window.open(data.Url, '_blank');
+        })
+        .catch((error) => {
+          console.error("Launch Game error:", error);
+        });
+    }
+
+  };
 
   return (
     <div className="container mt-3">
@@ -47,11 +53,14 @@ const CasinoGames = () => {
         <h3>Live Casino</h3>
         <div className="row">
           {casinos && casinos.map((game, index) => (
-            <div className="col-md-2 col-4 mb-3 mx-0 px-1" key={index}>
+            <div className="col-md-2 col-4 mb-3" key={index}>
               <Link
                 key={game.id}
-                className=''
-                onClick={() => launchGame(game?.code, game.code)}
+                className='col-4 col-md-4 col-lg-3 col-xl-2 mb-1 mb-sm-4 px-1 py-0 mx-0'
+                onClick={(e) => {
+                  e.preventDefault();
+                  launchGame(game.code, game.pivot.game_type_id)}
+                }
               >
                 <img
                   className={`img-fluid rounded-3 shadow gameImg w-100 h-auto`}
