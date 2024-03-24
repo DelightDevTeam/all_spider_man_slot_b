@@ -10,9 +10,18 @@ const ArcadeGames = () => {
   const { data: games, loading } = useFetch(url);
 
   const slots = games[0]?.products;
+  const slotCode = games[0]?.code;
+
   const casinos = games[1]?.products;
+  const casinoCode = games[1]?.code;
+
   const sports = games[2]?.products;
+  const sportCode = games[2]?.code;
+
   const fishes = games[3]?.products;
+  const fishCode = games[3]?.code;
+
+  // console.log(fishCode);
 
   let auth = localStorage.getItem("token");
 
@@ -24,6 +33,7 @@ const ArcadeGames = () => {
         productId: productId,
         gameType: gameType,
       }
+      // console.log(gameData);
   
       fetch(BASE_URL + "/game/Seamless/LaunchGame", {
         method: "POST",
@@ -64,7 +74,7 @@ const ArcadeGames = () => {
                 className='w-100'
                 onClick={(e) => {
                   e.preventDefault();
-                  launchGame(game.code, game.pivot.game_type_id)}
+                  launchGame(game.code, slotCode)}
                 }
               >
                 <img
@@ -86,7 +96,7 @@ const ArcadeGames = () => {
                 className='col-4 col-md-4 col-lg-3 col-xl-2 mb-1 mb-sm-4 px-1 py-0 mx-0'
                 onClick={(e) => {
                   e.preventDefault();
-                  launchGame(game.code, game.pivot.game_type_id)}
+                  launchGame(game.code, casinoCode)}
                 }
               >
                 <img
@@ -108,7 +118,7 @@ const ArcadeGames = () => {
                 className='col-4 col-md-4 col-lg-3 col-xl-2 mb-1 mb-sm-4 px-1 py-0 mx-0'
                 onClick={(e) => {
                   e.preventDefault();
-                  launchGame(game.code, game.pivot.game_type_id)}
+                  launchGame(game.code, sportCode)}
                 }
               >
                 <img
@@ -130,7 +140,7 @@ const ArcadeGames = () => {
                 className='col-4 col-md-4 col-lg-3 col-xl-2 mb-1 mb-sm-4 px-1 py-0 mx-0'
                 onClick={(e) => {
                   e.preventDefault();
-                  launchGame(game.code, game.pivot.game_type_id)}
+                  launchGame(game.code, fishCode)}
                 }
               >
                 <img

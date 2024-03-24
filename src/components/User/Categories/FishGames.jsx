@@ -7,7 +7,10 @@ import { Link } from 'react-router-dom';
 const FishGames = () => {
   const [url, setUrl] = useState(BASE_URL + '/allGameProducts');
   const { data: games, loading } = useFetch(url);
+  
   const fishes = games[3]?.products;
+  const fishCode = games[3]?.code;
+
   let auth = localStorage.getItem("token");
 
   const launchGame = (productId, gameType) => {
@@ -58,7 +61,7 @@ const FishGames = () => {
                 className='col-4 col-md-4 col-lg-3 col-xl-2 mb-1 mb-sm-4 px-1 py-0 mx-0'
                 onClick={(e) => {
                   e.preventDefault();
-                  launchGame(game.code, game.pivot.game_type_id)}
+                  launchGame(game.code, fishCode)}
                 }
               >
                 <img

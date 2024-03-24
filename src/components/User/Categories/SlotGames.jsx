@@ -8,6 +8,7 @@ const SlotGames = () => {
   const [url, setUrl] = useState(BASE_URL + '/allGameProducts');
   const { data: games, loading } = useFetch(url);
   const slots = games[0]?.products;
+  const slotCode = games[0]?.code;
   
   let auth = localStorage.getItem("token");
 
@@ -59,7 +60,7 @@ const SlotGames = () => {
                 className='w-100'
                 onClick={(e) => {
                   e.preventDefault();
-                  launchGame(game.code, game.pivot.game_type_id)}
+                  launchGame(game.code, slotCode)}
                 }
               >
                 <img
