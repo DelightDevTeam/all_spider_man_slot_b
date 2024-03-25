@@ -2,54 +2,86 @@ import React, { useEffect, useState } from "react";
 import "../../assets/css/navbar.css";
 import { useNavigate } from "react-router-dom";
 import BASE_URL from "../../hooks/baseURL";
+import useFetch from "../../hooks/useFetch";
+import { Alert } from "react-bootstrap";
+import SmallSpinner from "../../components/spinner/SmallSpinner";
 
 const ChangePassword = () => {
-  let auth = localStorage.getItem("authToken");
+  let auth = localStorage.getItem("token");
   let navigate = useNavigate();
+
   const [currentPassword, setCurrentPassword] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
-  const [errMessage, setErrMessage] = useState();
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const { data: authUser } = useFetch(BASE_URL + "/user");
+  const[user, setUser] = useState(authUser);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const [loader, setLoader] = useState(false);
+
   if (!auth) {
     useEffect(() => {
       navigate("/");
     }, [navigate]);
   }
 
-  let handle = async (e) => {
+  const handlePassword = (e) => {
     e.preventDefault();
-
-    try {
-      let data = { currentPassword, password };
-      // console.log(data);
-      let response = await fetch(BASE_URL + "/changePassword", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("authToken"),
-        },
-        body: JSON.stringify(data),
+    setLoader(true);
+    const inputData = {
+      current_password: currentPassword,
+      password: password,
+      password_confirmation: confirmPassword,
+    };
+    // console.log(inputData);
+    fetch(BASE_URL + "/changePassword", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      body: JSON.stringify(inputData),
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          setLoader(false);
+          let errorData;
+          try {
+            errorData = await response.json();
+          } catch (error) {
+            console.error("Error parsing JSON:", error);
+          }
+          if (response.status === 422) {
+            setError(errorData.errors);
+            console.error(`${response.status}:`, errorData);
+          } else if (response.status === 401) {
+            setError(errorData.message);
+            setTimeout(() => {
+              setError("");
+            }, 3000);
+            console.error(`${response.status}:`, errorData);
+          } else {
+            console.error(`Unexpected error with status ${response.status}`);
+          }
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // console.log(data);
+        setLoader(false);
+        setSuccess("New Password Changed Successfully.");
+        setError("")
+        setTimeout(() => {
+          setSuccess("");
+        }, 1000);
+      })
+      .catch((error) => {
+        console.error(error);
       });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message);
-      }
-
-      let user = await response.json();
-      setUser(user.data);
-      console.log("Password Changed Successfully.");
-      setCurrentPassword("");
-      setPassword("");
-      navigate("/");
-    } catch (error) {
-      console.log(error.message);
-      if (error.message == "Old Passowrd is incorrect") {
-        setErrMessage(error.message);
-      }
-    }
   };
+
 
   return (
     <>
@@ -63,8 +95,10 @@ const ChangePassword = () => {
               >
                 လျှို့ဝှက်နံပါတ်ပြောင်းမည်
               </h6>
+              {success && <Alert variant="success">{success}</Alert>}
+              {error && <Alert variant="danger">{error}</Alert>}
               <div className="container my-4">
-                <form onSubmit={handle}>
+                <form onSubmit={handlePassword}>
                   <div className="form-group mb-3">
                     <input
                       type="password"
@@ -75,6 +109,7 @@ const ChangePassword = () => {
                       onChange={(e) => setCurrentPassword(e.target.value)}
                       value={currentPassword}
                     />
+                    {error?.current_password && <p className="text-danger">{error?.current_password}</p>}
                   </div>
 
                   <div className="form-group mb-4">
@@ -83,15 +118,26 @@ const ChangePassword = () => {
                       className="form-control"
                       placeholder="လျှို့ဝှက်နံပါတ်အသစ်"
                       name="password"
-                      id="new_password"
                       onChange={(e) => setPassword(e.target.value)}
                       value={password}
                     />
+                    {error?.password && <p className="text-danger">{error?.password}</p>}
                   </div>
-                  {errMessage && <p className="text-danger">{errMessage}</p>}
+                  <div className="form-group mb-4">
+                    <input
+                      type="password"
+                      className="form-control"
+                      placeholder="လျှို့ဝှက်နံပါတ် အသစ်ထပ်ရေးပါ"
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      value={confirmPassword}
+                    />
+                    {error?.password_confirmation && <p className="text-danger">{error?.password_confirmation}</p>}
+                  </div>
+                  
 
                   <div className="form-group my-2 float-end">
                     <button type="submit" className="loginBtn text-white">
+                      {loader && <SmallSpinner />}
                       ပြောင်းမည်
                     </button>
                   </div>
