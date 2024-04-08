@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert } from 'react-bootstrap';
+import { Alert, Spinner } from 'react-bootstrap';
 import BASE_URL from '../../hooks/baseURL';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,6 +12,7 @@ export default function ChangePassword() {
   const navigate = useNavigate();
 
   let auth = localStorage.getItem("token");
+  let lan = localStorage.getItem("lang");
   let passwordChanged = localStorage.getItem('is_changed_password');
 
   useEffect(() => {
@@ -75,7 +76,7 @@ export default function ChangePassword() {
         <div className="col-md-6 offset-md-3">
           <div className="border rounded p-4 shadow-lg mt-4">
             <div className="card-header">
-              <h5 className="text-center text-white">Change Password</h5>
+              <h5 className="text-center text-white">{lan=== "mm" ? "လျို့ဝှက်နံပါတ် ပြောင်းမည်။" : "Change Password"}</h5>
             </div>
             <div className="card-body">
               {success && <Alert variant="success">{success}</Alert>}
@@ -83,35 +84,36 @@ export default function ChangePassword() {
               <form onSubmit={changePassword}>
                 <div className="mb-3">
                   <label htmlFor="newpassword" className="form-label text-white">
-                    New Password
+                  {lan=== "mm" ? "လျို့ဝှက်နံပါတ်အသစ်" : "New Password"}
                   </label>
                   <input
                     type="password"
                     name="password"
                     className="form-control"
                     id="newpassword"
-                    placeholder="Enter Password"
+                    placeholder={`${lan === "mm" ? "လျို့ဝှက်နံပါတ်အသစ်" : "Enter New Password"}`}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
                 <div className="mb-5">
                   <label htmlFor="password" className="form-label text-white">
-                    Confirmed Password
+                  {lan=== "mm" ? "လျို့ဝှက်နံပါတ်အသစ် ထပ်မံရိုက်ပါ" : "Confirm Password"}
                   </label>
                   <input
                     type="password"
                     name="password_confirmation"
                     className="form-control"
                     id="password"
-                    placeholder="Enter Confirmed Password"
+                    placeholder={`${lan === "mm" ? "လျို့ဝှက်နံပါတ်အသစ် ထပ်မံရိုက်ပါ" : "Enter Confirm Password"}`}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                   />
                 </div>
                 <div className="mb-3">
                   <button type="submit" className="btn btn-outline-light w-100">
-                    {loader ? 'Changing...' : 'Change'}
+                    {loader && <Spinner />}
+                    {lan==="mm" ? "ပြောင်းမည်" : "Change"}
                   </button>
                 </div>
               </form>
