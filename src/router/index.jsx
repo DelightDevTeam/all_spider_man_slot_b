@@ -40,7 +40,7 @@ const router = createBrowserRouter([
         element: <Promotion />,
       },
       {
-        path: "/password",
+        path: "/changePassword",
         element: <ChangePassword />,
       },
       {
