@@ -11,6 +11,7 @@ const CasinoGames = () => {
   const casinoCode = games[1]?.code;
 
   let auth = localStorage.getItem("token");
+  const lan = localStorage.getItem("lang");
 
   const launchGame = (productId, gameType) => {
     if(!auth){
@@ -51,7 +52,7 @@ const CasinoGames = () => {
     <div className="container mt-3">
       {loading && <BtnSpinner />}
       <div className="mb-4">
-        <h3>Live Casino</h3>
+        <h3 className="mb-3">{lan === "mm" ? "တိုက်ရိုက်ကာစီနို" : "LIVE CASINOS"}</h3>
         <div className="row">
           {casinos && casinos.map((game, index) => (
             <div className="col-md-2 col-4 mb-3" key={index}>

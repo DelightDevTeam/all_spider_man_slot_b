@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 const FishGames = () => {
   const [url, setUrl] = useState(BASE_URL + '/allGameProducts');
   const { data: games, loading } = useFetch(url);
+  const lan = localStorage.getItem("lang");
   
   const fishes = games[3]?.products;
   const fishCode = games[3]?.code;
@@ -52,7 +53,7 @@ const FishGames = () => {
     <div className="container mt-3">
       {loading && <BtnSpinner />}
       <div className="mb-4">
-        <h3>Fishing</h3>
+        <h3 className="mb-3">{lan === "mm" ? "ငါးဖမ်းခြင်း" : "FISHING"}</h3>
         <div className="row">
         {fishes && fishes.map((game, index) => (
             <div className="col-md-2 col-4 mb-3" key={index}>

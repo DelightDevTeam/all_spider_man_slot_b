@@ -9,6 +9,7 @@ import SmallSpinner from "../../components/spinner/SmallSpinner";
 
 const Profile = () => {
   let auth = localStorage.getItem("token");
+  let lan = localStorage.getItem("lang");
   const navigate = useNavigate();
   if (!auth) {
     navigate("/login");
@@ -139,7 +140,7 @@ const Profile = () => {
                     <div className="form-group my-2 float-end">
                       <button type="submit" className="loginBtn text-white">
                         {loader && <SmallSpinner />}
-                        ပြောင်းမည်
+                        {lan==="mm" ? "ပြောင်းမည်" : "Change"}
                       </button>
                     </div>
                   </form>

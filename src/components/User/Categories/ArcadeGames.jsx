@@ -8,6 +8,8 @@ const ArcadeGames = () => {
   const navigate = useNavigate();
   const [url, setUrl] = useState(BASE_URL + '/allGameProducts');
   const { data: games, loading } = useFetch(url);
+   
+  const lan = localStorage.getItem("lang");
 
   const slots = games[0]?.products;
   const slotCode = games[0]?.code;
@@ -65,7 +67,7 @@ const ArcadeGames = () => {
     <div className="container mt-3">
       {loading && <BtnSpinner />}
       <div className="mb-4">
-        <h3>Slots</h3>
+        <h3 className="mb-3">{lan === "mm" ? "စလော့" : "SLOTS"}</h3>
         <div className="row">
           {slots && slots.map((game, index) => (
             <div className="col-md-2 col-4 mb-3 mx-0 px-1" key={index}>
@@ -87,7 +89,7 @@ const ArcadeGames = () => {
         </div>
       </div>
       <div className="mb-4">
-        <h3>Live Casinos</h3>
+        <h3 className="mb-3">{lan === "mm" ? "တိုက်ရိုက်ကာစီနို" : "LIVE CASINOS"}</h3>
         <div className="row">
           {casinos && casinos.map((game, index) => (
             <div className="col-md-2 col-4 mb-3" key={index}>
@@ -109,7 +111,7 @@ const ArcadeGames = () => {
         </div>
       </div>
       <div className="mb-4">
-        <h3>Sport Books</h3>
+        <h3 className="mb-3">{lan === "mm" ? "အားကစား" : "SPORT BOOKS"}</h3>
         <div className="row">
           {sports && sports.map((game, index) => (
             <div className="col-md-2 col-4 mb-3" key={index}>
@@ -131,7 +133,7 @@ const ArcadeGames = () => {
         </div>
       </div>
       <div className="mb-4">
-        <h3>Fishes</h3>
+        <h3 className="mb-3">{lan === "mm" ? "ငါးဖမ်းခြင်း" : "FISHING"}</h3>
         <div className="row">
           {fishes && fishes.map((game, index) => (
             <div className="col-md-2 col-4 mb-3" key={index}>

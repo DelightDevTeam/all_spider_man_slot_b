@@ -10,6 +10,7 @@ const SportGames = () => {
   const { data: games, loading } = useFetch(url);
   const sports = games[2]?.products;
   const sportCode = games[2]?.code;
+  const lan = localStorage.getItem('lang');
   // console.log(games);
 
     let [loader, setLoader] = useState(false);
@@ -54,7 +55,7 @@ const SportGames = () => {
     <div className="container mt-3">
       {loading && <BtnSpinner />}
       <div className="mb-4">
-        <h3>Sport Book</h3>
+        <h3 className="mb-3">{lan === "mm" ? "အားကစား" : "SPORT BOOKS"}</h3>
         <div className="row">
         {sports && sports.map((game, index) => (
             <div className="col-md-2 col-4 mb-3" key={index}>

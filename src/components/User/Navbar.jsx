@@ -8,6 +8,7 @@ import useFetch from "../../hooks/useFetch";
 
 const Navbar = () => {
   let auth = localStorage.getItem("token");
+  let [lan, setLan] = useState(localStorage.getItem("lang"));
   let [url, setUrl] = useState(BASE_URL + "/user");
   const {data:user} = useFetch(url);
 
@@ -50,6 +51,17 @@ const Navbar = () => {
       });
   };
 
+  const language = (e) => {
+    e.preventDefault(); 
+    let currentLang = localStorage.getItem("lang");
+    let lang = currentLang === "mm" ? "en" : "mm";
+    localStorage.setItem("lang", lang);
+    setLan(localStorage.getItem('lang'));
+    window.location.reload();
+  };
+
+  // console.log(lan);
+
   return (
     <>
     {!auth && (
@@ -73,34 +85,39 @@ const Navbar = () => {
               <img className="logo" src={logo} />
             </Link>
           </div>
-          <div className="">
-            <div className="dropdown-center d-inline me-3">
-              <a
-                className="text-decoration-none"
-                href="#"
-              >
-                {/* <i
-                  className="fas fa-wallet text-white"
-                  style={{ fontSize: "20px" }}
-                ></i> */}
-                <span className="text-white">
-                  K{parseFloat(user?.balance).toLocaleString()}
-                </span>
-              </a>
-            </div>
-            <Link
-              to="/profile"
-              className="text-decoration-none text-white me-3"
-            >
+          <div className="d-flex justify-content-center align-items-center">
+            <div className="me-3 d-flex">
+              <span className="d-block">MM</span>
               <i
-                className="fa-regular fa-user-circle"
-                style={{ fontSize: "20px" }}
+                className={`fas fa-toggle-${lan === "mm" ? "off" : "on"} d-block mx-2`}
+                onClick={language}
+                style={{ cursor: "pointer", fontSize: "20px" }}
               ></i>
-            </Link>
-            <button className="loginBtn" onClick={logOut}>
+              <span className="d-block">EN</span>
+            </div>
+            
+            <div className="border border-success rounded-3 px-2 py-1 me-2 m-auto">
+              <Link
+                to="/profile"
+                className="text-decoration-none text-white me-3 text-center"
+              >
+                <i
+                  className="fa-regular fa-user-circle me-2"
+                  style={{ fontSize: "20px" }}
+                ></i>
+                <span>{user?.user_name}</span>
+              </Link>
+              <span className="text-white d-block">
+                <i className="fas fa-wallet me-2"></i>
+                  K{parseFloat(user?.balance).toLocaleString()}
+              </span>
+              
+            </div>
+            
+            <a onClick={logOut} style={{ cursor: "pointer" }} className="p-2 text-white">
               {smallLoad && <BtnSpinner />}
-              Logout
-            </button>
+              <i className="fas fa-right-from-bracket"></i>
+            </a>
           </div>
         </div>
       </>
