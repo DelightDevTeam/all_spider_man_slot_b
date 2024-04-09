@@ -82,7 +82,8 @@ const Navbar = () => {
         <div className="navbar d-flex justify-content-between">
           <div>
             <Link to={"/"} className="text-decoration-none">
-              <img className="logo" src={logo} />
+              <img className="logo d-none d-md-inline" src={logo} />
+              <img className="d-md-none d-sm-inline" src={logo} width={60} />
               <span className="text-white ms-3 d-none d-md-inline">Spider-Man</span>
             </Link>
           </div>

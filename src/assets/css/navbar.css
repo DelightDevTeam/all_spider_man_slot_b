@@ -6,7 +6,8 @@
   gap: 30px;
 }
 .logo {
-  width: 80px;
+  width: 50px;
+  height: auto;
   border-radius: 15px;
 }
 .loginBtn {
@@ -31,3 +32,4 @@
 .dropdown-item {
   color: #fff;
 }
+
