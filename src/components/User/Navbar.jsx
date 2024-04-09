@@ -83,7 +83,7 @@ const Navbar = () => {
           <div>
             <Link to={"/"} className="text-decoration-none">
               <img className="logo" src={logo} />
-              <span className="text-white ms-3">Spider-Man</span>
+              <span className="text-white ms-3 d-none d-md-inline">Spider-Man</span>
             </Link>
           </div>
           {/* mobile */}
