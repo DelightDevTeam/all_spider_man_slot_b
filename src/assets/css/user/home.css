@@ -362,6 +362,7 @@ marquee {
   }
   .category {
     padding: 10px 15px;
+    text-align: center;
   }
   .category p {
     font-size: 14px;
@@ -399,6 +400,9 @@ marquee {
   }
   .tab img {
     height: 50px;
+  }
+  .categoriesAndWinner{
+    margin-top: 0px;
   }
 }
 @media screen and (max-width: 920px) {
@@ -452,6 +456,7 @@ marquee {
 @media screen and (max-width: 650px) {
   .category {
     padding: 10px 15px;
+    text-align: center;
   }
   .category p {
     font-size: 12px;
@@ -487,7 +492,8 @@ marquee {
 }
 @media screen and (max-width: 600px) {
   .category {
-    padding: 10px 13px;
+    padding: 10px 15px;
+    text-align: center;
   }
   .category p {
     font-size: 11px;
@@ -556,8 +562,9 @@ marquee {
     border-top-left-radius: 15px;
   }
   .category {
-    padding: 2px 4px;
+    padding: 2px 15px;
     border-radius: 8px;
+    text-align: center;
   }
   .category p {
     font-size: 12px;
