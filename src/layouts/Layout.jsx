@@ -18,8 +18,8 @@ export default function Layout() {
 
         <Outlet />
 
-        <Platform />
-        {/* <Footer /> */}
+        {/* <Platform /> */}
+        <Footer />
       </div>
     </>
   );
