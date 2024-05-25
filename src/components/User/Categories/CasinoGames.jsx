@@ -55,10 +55,10 @@ const CasinoGames = () => {
         <h3 className="mb-3">{lan === "mm" ? "တိုက်ရိုက်ကာစီနို" : "LIVE CASINOS"}</h3>
         <div className="row">
           {casinos && casinos.map((game, index) => (
-            <div className="col-md-2 col-4 mb-3" key={index}>
+            <div className="col-md-2 col-4 mb-3 p-1" key={index}>
               <Link
                 key={game.id}
-                className='col-4 col-md-4 col-lg-3 col-xl-2 mb-1 mb-sm-4 px-1 py-0 mx-0'
+                className='w-100'
                 onClick={(e) => {
                   e.preventDefault();
                   launchGame(game.code, casinoCode)}
