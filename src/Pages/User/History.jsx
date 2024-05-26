@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 
 export default function History() {
     let auth = localStorage.getItem("token");
+    let lan = localStorage.getItem('lang');
+
     let navigate = useNavigate();
     useEffect(() => {
         if (!auth) {
@@ -23,24 +25,24 @@ export default function History() {
     <>
       <ToastContainer />
       <div className="container my-5">
-        <h3 className="text-center mb-4">History Logs</h3>
+        <h3 className="text-center mb-4">{lan === "mm" ? "မှတ်တမ်း" : "History Logs"}</h3>
         <div className="d-flex mb-3">
                 <button 
                 className={`btn btn-sm btn-outline-primary m-md-2 m-1 ${param == "today" ? "active" : ""}`}
                 onClick={()=>setParam("today")}
-                >Today</button>
+                >{lan === "mm" ? "ယနေ့" : "Today"}</button>
                 <button 
                 className={`btn btn-sm btn-outline-primary m-md-2 m-1 ${param == "yesterday" ? "active" : ""}`}
                 onClick={()=>setParam("yesterday")}
-                >Yesterday</button>
+                >{lan === "mm" ? "မနေ့က" : "Yesterday"}</button>
                 <button 
                 className={`btn btn-sm btn-outline-primary m-md-2 m-1 ${param == "this_week" ? "active" : ""}`}
                 onClick={()=>setParam("this_week")}
-                >This Week</button>
+                >{lan === "mm" ? "ယခုအပတ်" : "This Week"}</button>
                 <button 
                 className={`btn btn-sm btn-outline-primary m-md-2 m-1 ${param == "last_week" ? "active" : ""}`}
                 onClick={()=>setParam("last_week")}
-                >Last Week</button>
+                >{lan === "mm" ? "အရင်အပတ်" : "Last Week"}</button>
             </div>
 
             {logs && (
@@ -48,12 +50,12 @@ export default function History() {
                 <table className="table table-primary">
                     <thead>
                         <tr>
-                            <th>နံပါတ်</th>
+                            <th>{lan === "mm" ? "နံပါတ်" : "No"}</th>
                             {/* <th>ဂိမ်းအခြေအနေ</th> */}
-                            <th>အပိတ်လက်ကျန်</th>
-                            <th>အမျိုးအစား</th>
-                            <th>ပမာဏ (ကျပ်)</th>
-                            <th>အချိန်</th>
+                            <th>{lan === "mm" ? "အပိတ်လက်ကျန်" : "Remain"}</th>
+                            <th>{lan === "mm" ? "အမျိုးအစား" : "Type"}</th>
+                            <th>{lan === "mm" ? "ပမာဏ (ကျပ်)" : "Amount (Ks)"}</th>
+                            <th>{lan === "mm" ? "အချိန်" : "Time"}</th>
                         </tr>
                     </thead>
                     <tbody>

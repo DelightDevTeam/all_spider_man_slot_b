@@ -8,11 +8,22 @@ const ArcadeGames = () => {
   const navigate = useNavigate();
   const [url, setUrl] = useState(BASE_URL + '/allGameProducts');
   const { data: games, loading } = useFetch(url);
+   
+  const lan = localStorage.getItem("lang");
 
   const slots = games[0]?.products;
+  const slotCode = games[0]?.code;
+
   const casinos = games[1]?.products;
+  const casinoCode = games[1]?.code;
+
   const sports = games[2]?.products;
+  const sportCode = games[2]?.code;
+
   const fishes = games[3]?.products;
+  const fishCode = games[3]?.code;
+
+  // console.log(fishCode);
 
   let auth = localStorage.getItem("token");
 
@@ -24,6 +35,7 @@ const ArcadeGames = () => {
         productId: productId,
         gameType: gameType,
       }
+      // console.log(gameData);
   
       fetch(BASE_URL + "/game/Seamless/LaunchGame", {
         method: "POST",
@@ -55,7 +67,7 @@ const ArcadeGames = () => {
     <div className="container mt-3">
       {loading && <BtnSpinner />}
       <div className="mb-4">
-        <h3>Slots</h3>
+        <h3 className="mb-3">{lan === "mm" ? "စလော့" : "SLOTS"}</h3>
         <div className="row">
           {slots && slots.map((game, index) => (
             <div className="col-md-2 col-4 mb-3 mx-0 px-1" key={index}>
@@ -64,7 +76,7 @@ const ArcadeGames = () => {
                 className='w-100'
                 onClick={(e) => {
                   e.preventDefault();
-                  launchGame(game.code, game.pivot.game_type_id)}
+                  launchGame(game.code, slotCode)}
                 }
               >
                 <img
@@ -77,20 +89,20 @@ const ArcadeGames = () => {
         </div>
       </div>
       <div className="mb-4">
-        <h3>Live Casinos</h3>
+        <h3 className="mb-3">{lan === "mm" ? "တိုက်ရိုက်ကာစီနို" : "LIVE CASINOS"}</h3>
         <div className="row">
           {casinos && casinos.map((game, index) => (
-            <div className="col-md-2 col-4 mb-3" key={index}>
+            <div className="col-md-2 col-4 mb-3 p-1" key={index}>
               <Link
                 key={game.id}
-                className='col-4 col-md-4 col-lg-3 col-xl-2 mb-1 mb-sm-4 px-1 py-0 mx-0'
+                className='w-100'
                 onClick={(e) => {
                   e.preventDefault();
-                  launchGame(game.code, game.pivot.game_type_id)}
+                  launchGame(game.code, casinoCode)}
                 }
               >
                 <img
-                  className={`img-fluid rounded-3 shadow gameImg w-100 h-auto`}
+                  className={`w-100 rounded-3 shadow h-auto`}
                   src={game.imgUrl}
                 />
               </Link>
@@ -99,16 +111,16 @@ const ArcadeGames = () => {
         </div>
       </div>
       <div className="mb-4">
-        <h3>Sport Books</h3>
+        <h3 className="mb-3">{lan === "mm" ? "အားကစား" : "SPORT BOOKS"}</h3>
         <div className="row">
           {sports && sports.map((game, index) => (
-            <div className="col-md-2 col-4 mb-3" key={index}>
+            <div className="col-md-2 col-4 mb-3 p-1" key={index}>
               <Link
                 key={game.id}
-                className='col-4 col-md-4 col-lg-3 col-xl-2 mb-1 mb-sm-4 px-1 py-0 mx-0'
+                className='w-100'
                 onClick={(e) => {
                   e.preventDefault();
-                  launchGame(game.code, game.pivot.game_type_id)}
+                  launchGame(game.code, sportCode)}
                 }
               >
                 <img
@@ -121,16 +133,16 @@ const ArcadeGames = () => {
         </div>
       </div>
       <div className="mb-4">
-        <h3>Fishes</h3>
+        <h3 className="mb-3">{lan === "mm" ? "ငါးဖမ်းခြင်း" : "FISHING"}</h3>
         <div className="row">
           {fishes && fishes.map((game, index) => (
-            <div className="col-md-2 col-4 mb-3" key={index}>
+            <div className="col-md-2 col-4 mb-3 p-1" key={index}>
               <Link
                 key={game.id}
-                className='col-4 col-md-4 col-lg-3 col-xl-2 mb-1 mb-sm-4 px-1 py-0 mx-0'
+                className='w-100'
                 onClick={(e) => {
                   e.preventDefault();
-                  launchGame(game.code, game.pivot.game_type_id)}
+                  launchGame(game.code, fishCode)}
                 }
               >
                 <img

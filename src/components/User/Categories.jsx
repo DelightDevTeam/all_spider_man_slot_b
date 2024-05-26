@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useFetch from "../../hooks/useFetch";
 import BASE_URL from "../../hooks/baseURL";
 import fire from "../../assets/img/categories/fire.png";
@@ -7,6 +7,16 @@ import all from "../../assets/img/categories/all.png";
 const Categories = ({ activeCategory, setActiveCategory }) => {
   let btnUrl = BASE_URL + "/gameType";
   let { data: games } = useFetch(btnUrl);
+  const initialLang = localStorage.getItem("lang");
+  const [lan, setLan] = useState(initialLang);
+
+  useEffect(() => {
+    setLan(initialLang);
+  }, [initialLang]);
+
+  console.log(lan);
+
+
 
   // console.log(games);
 
@@ -25,7 +35,7 @@ const Categories = ({ activeCategory, setActiveCategory }) => {
             alt="hotgame"
             style={{ width: "30px", height: "40px" }}
           />
-          <p className="font-weight-bold mt-2">ALL GAMES</p>
+          <p className="font-weight-bold mt-2">{lan === "mm" ? "ဂိမ်းအားလုံး" : "ALL GAMES"}</p>
         </div>
         {/* <div onClick={(e) => handleCategory("hotgame", 5)} className="category">
           <img
@@ -48,7 +58,7 @@ const Categories = ({ activeCategory, setActiveCategory }) => {
                 src={game.img_url}
                 alt={game.name} // Add alt attribute for accessibility
               />
-              <p className="font-weight-bold mt-2">{game.name}</p>
+              <p className="font-weight-bold mt-2">{lan === "mm" ? game.name_mm : game.name}</p>
             </div>
           ))}
       </div>

@@ -1,108 +1,126 @@
-import React, { useEffect, useState } from "react";
-import "../../assets/css/navbar.css";
-import { useNavigate } from "react-router-dom";
-import BASE_URL from "../../hooks/baseURL";
+import React, { useEffect, useState } from 'react';
+import { Alert, Spinner } from 'react-bootstrap';
+import BASE_URL from '../../hooks/baseURL';
+import { useNavigate } from 'react-router-dom';
 
-const ChangePassword = () => {
-  let auth = localStorage.getItem("authToken");
-  let navigate = useNavigate();
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
-  const [errMessage, setErrMessage] = useState();
-  if (!auth) {
-    useEffect(() => {
-      navigate("/");
-    }, [navigate]);
-  }
+export default function ChangePassword() {
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [loader, setLoader] = useState(false);
+  const navigate = useNavigate();
 
-  let handle = async (e) => {
+  let auth = localStorage.getItem("token");
+  let lan = localStorage.getItem("lang");
+  let passwordChanged = localStorage.getItem('is_changed_password');
+
+  useEffect(() => {
+    if (auth && passwordChanged === 1) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
+  const changePassword = async (e) => {
     e.preventDefault();
+    setLoader(true);
+
+    const data = {
+      password: password,
+      password_confirmation: confirmPassword,
+      user_id: localStorage.getItem('user_id'),
+    };
 
     try {
-      let data = { currentPassword, password };
-      // console.log(data);
-      let response = await fetch(BASE_URL + "/changePassword", {
-        method: "POST",
+      const response = await fetch(BASE_URL + '/player-change-password', {
+        method: 'POST',
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("authToken"),
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message);
-      }
+      const responseData = await response.json();
 
-      let user = await response.json();
-      setUser(user.data);
-      console.log("Password Changed Successfully.");
-      setCurrentPassword("");
-      setPassword("");
-      navigate("/");
-    } catch (error) {
-      console.log(error.message);
-      if (error.message == "Old Passowrd is incorrect") {
-        setErrMessage(error.message);
+      if (!response.ok) {
+        if (response.status === 422) {
+          setError(responseData?.errors?.password && responseData?.errors?.password[0]);
+        } else if (response.status === 401) {
+          setError(responseData.message);
+          setTimeout(() => {
+            setError('');
+          }, 3000);
+        } else {
+          console.error(`Unexpected error with status ${response.status}`);
+        }
+      } else {
+        setSuccess('New Password Changed Successfully.');
+        setPassword('');
+        navigate('/login');
+        setConfirmPassword('');
+        setTimeout(() => {
+          setSuccess('');
+        }, 3000);
       }
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setLoader(false);
     }
   };
 
   return (
-    <>
-      <div className="container">
-        <div className="row">
-          <div className="col-lg-4 offset-lg-4 col-md-6 offset-md-3">
-            <div style={{ paddingBottom: 200 }} className="pt-2">
-              <h6
-                className="text-center p-3"
-                style={{ color: "#fff", fontWeight: "bolder" }}
-              >
-                လျှို့ဝှက်နံပါတ်ပြောင်းမည်
-              </h6>
-              <div className="container my-4">
-                <form onSubmit={handle}>
-                  <div className="form-group mb-3">
-                    <input
-                      type="password"
-                      className="form-control"
-                      placeholder="လျှို့ဝှက်နံပါတ်အဟောင်း"
-                      name="current_password"
-                      id="current_password"
-                      onChange={(e) => setCurrentPassword(e.target.value)}
-                      value={currentPassword}
-                    />
-                  </div>
-
-                  <div className="form-group mb-4">
-                    <input
-                      type="password"
-                      className="form-control"
-                      placeholder="လျှို့ဝှက်နံပါတ်အသစ်"
-                      name="password"
-                      id="new_password"
-                      onChange={(e) => setPassword(e.target.value)}
-                      value={password}
-                    />
-                  </div>
-                  {errMessage && <p className="text-danger">{errMessage}</p>}
-
-                  <div className="form-group my-2 float-end">
-                    <button type="submit" className="loginBtn text-white">
-                      ပြောင်းမည်
-                    </button>
-                  </div>
-                </form>
-              </div>
+    <div className="container">
+      <div className="row">
+        <div className="col-md-6 offset-md-3">
+          <div className="border rounded p-4 shadow-lg mt-4">
+            <div className="card-header">
+              <h5 className="text-center text-white">{lan=== "mm" ? "လျို့ဝှက်နံပါတ် ပြောင်းမည်။" : "Change Password"}</h5>
+            </div>
+            <div className="card-body">
+              {success && <Alert variant="success">{success}</Alert>}
+              {error && <Alert variant="danger">{error}</Alert>}
+              <form onSubmit={changePassword}>
+                <div className="mb-3">
+                  <label htmlFor="newpassword" className="form-label text-white">
+                  {lan=== "mm" ? "လျို့ဝှက်နံပါတ်အသစ်" : "New Password"}
+                  </label>
+                  <input
+                    type="password"
+                    name="password"
+                    className="form-control"
+                    id="newpassword"
+                    placeholder={`${lan === "mm" ? "လျို့ဝှက်နံပါတ်အသစ်" : "Enter New Password"}`}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </div>
+                <div className="mb-5">
+                  <label htmlFor="password" className="form-label text-white">
+                  {lan=== "mm" ? "လျို့ဝှက်နံပါတ်အသစ် ထပ်မံရိုက်ပါ" : "Confirm Password"}
+                  </label>
+                  <input
+                    type="password"
+                    name="password_confirmation"
+                    className="form-control"
+                    id="password"
+                    placeholder={`${lan === "mm" ? "လျို့ဝှက်နံပါတ်အသစ် ထပ်မံရိုက်ပါ" : "Enter Confirm Password"}`}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                </div>
+                <div className="mb-3">
+                  <button type="submit" className="btn btn-outline-light w-100">
+                    {loader && <Spinner />}
+                    {lan==="mm" ? "ပြောင်းမည်" : "Change"}
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
-};
-
-export default ChangePassword;
+}
